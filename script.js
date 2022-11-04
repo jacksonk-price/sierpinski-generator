@@ -1,7 +1,6 @@
 let canvas = document.getElementById('canvas');
 
 let ctx = canvas.getContext('2d');
-ctx.fillStyle = '#fff';
 
 let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
@@ -16,11 +15,13 @@ const pointC = setC();
 function setStartingPoint(){
     startingX = canvasWidth / 2;
     startingY = canvasHeight / 2;
-
+    ctx.fillStyle = 'transparent';
     plotPoint(startingX, startingY);
     
     return [startingX, startingY];
 }
+
+ctx.fillStyle = '#fff';
 
 function setA(){
     pointAX = canvasWidth / 2;
@@ -69,7 +70,7 @@ const sleep = (time) => {
     return new Promise(resolve => setTimeout(resolve, time))
 }
 
-const startGeneration = async () => {
+function startGeneration () {
     let randNum;
     let newPoint;
     ctx.clearRect(0, 0, 1000, 900);
@@ -87,9 +88,8 @@ const startGeneration = async () => {
                 newPoint = findMidpoint(pointC[0], pointC[1], startingPoint[0], startingPoint[1] );
                 break;
             default:
-                console.log('Something went terribly wrong... ' + randNum);
+                console.log('Something went terribly wrong... sorry. Refresh and try again. ' + randNum);
             }
-        await sleep(2);
         startingPoint = newPoint;
         plotPoint(newPoint[0], newPoint[1]);
     }
@@ -102,7 +102,7 @@ let clearButton = document.getElementById('clear-btn');
 generateButton.addEventListener("click", startGeneration);
 
 clearButton.addEventListener("click", function(){
-    return;
+    ctx.clearRect(0, 0, 1000, 900);
 });
 
 
