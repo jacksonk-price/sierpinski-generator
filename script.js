@@ -1,109 +1,208 @@
 let canvas = document.getElementById('canvas');
 
 let ctx = canvas.getContext('2d');
+ctx.fillStyle = "#FFF";
 
 let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
 
-let pointSize = [1, 1];
+let pointSize = [0.5, 0.5];
 
-let startingPoint = setStartingPoint();
-const pointA = setA();
-const pointB = setB();
-const pointC = setC();
+let triangle = true;
 
-function setStartingPoint(){
-    startingX = canvasWidth / 2;
-    startingY = canvasHeight / 2;
-    ctx.fillStyle = 'transparent';
-    plotPoint(startingX, startingY);
-    
-    return [startingX, startingY];
+// declare all points needed
+let startingPoint = [(canvasWidth / 2), (canvasHeight / 2)];
+let pointA;
+let pointB;
+let pointC;
+let pointD;
+
+let triangleBtn = document.getElementById('triangle-btn');
+let squareBtn = document.getElementById('square-btn');
+triangleBtn.addEventListener('click', clickTriangle);
+squareBtn.addEventListener('click', clickSquare);
+
+clickTriangle();
+
+document.getElementById('generate-btn').addEventListener('click', function(){
+    start();
+});
+
+document.getElementById('clear-btn').addEventListener('click', function(){
+    clearCanvas();
+});
+
+function start(){
+    // run generation here. Check which shape user has selected and then choose appropriate generation and canvas set
+    if (triangle){
+        generateTriangle();
+        console.log('generating a triangle...');
+    }else{
+        generateSquare();
+        console.log('generating a square...');
+    }
 }
 
-ctx.fillStyle = '#fff';
+function clickTriangle(){
+    triangleBtn.classList.remove('opacity-50');
+    squareBtn.classList.add('opacity-50');
+    triangle = true;
+}
+
+function clickSquare(){
+    squareBtn.classList.remove('opacity-50');
+    triangleBtn.classList.add('opacity-50');
+    triangle = false;
+}
+
+function rollDie(){
+    let num = 0;
+    if (triangle){
+        num = Math.floor(Math.random() * 6) + 1;
+    }else{
+        num = Math.floor(Math.random() * 4) + 1;
+        console.log(num);
+    }
+    return num;
+}
 
 function setA(){
-    pointAX = canvasWidth / 2;
-    pointAY = 0;
+    let pointAX;
+    let pointAY;
 
-    plotPoint(pointAX, pointAY);
+    if (triangle){
+        pointAX = (canvasWidth / 2);
+        pointAY = 0;
+    }else{
+        pointAX = 0;
+        pointAY = 0;
+    }
 
     return [pointAX, pointAY];
 }
 
 function setB(){
-    pointBX = 0;
-    pointBY = canvasHeight;
+    let pointBX;
+    let pointBY;
 
-    plotPoint(pointBX, pointBY);
+    if (triangle){
+        pointBX = 0;
+        pointBY = canvasHeight;
+    }else{
+        pointBX = canvasWidth;
+        pointBY = 0;
+    }
 
     return [pointBX, pointBY];
 }
 
 function setC(){
-    pointCX = canvasWidth;
-    pointCY = canvasHeight;
+    let pointCX;
+    let pointCY;
 
-    plotPoint(pointCX, pointCY);
+    if (triangle){
+        pointCX = canvasWidth;
+        pointCY = canvasHeight;
+    }else{
+        pointCX = 0;
+        pointCY = canvasHeight;
+    }
 
     return [pointCX, pointCY];
 }
 
-function plotPoint(x, y){
-    ctx.fillRect(x, y, pointSize[0], pointSize[1]);
+function setD(){
+    let pointDX;
+    let pointDY;
+
+    // point D is only used on the square generation, so no conditional is needed
+    pointDX = canvasWidth;
+    pointDY = canvasHeight;
+
+    return [pointDX, pointDY];
 }
 
-function rollDice(){
-    let num = Math.floor(Math.random() * 6) + 1;
-    return num;
+function plotPoint(pointX, pointY){
+    ctx.fillRect(pointX, pointY, pointSize[0], pointSize[1]);
 }
 
-function findMidpoint(x1, y1, x2, y2){
-    let x =  (x1 + x2) / 2;
-    let y =  (y1 + y2) / 2;
+function findMidPoint(x1, y1, x2, y2){
+    let x = (x1 + x2) / 2;
+    let y = (y1 + y2) / 2;
 
     return [x, y];
 }
 
-const sleep = (time) => {
-    return new Promise(resolve => setTimeout(resolve, time))
-}
-
-function startGeneration () {
+function generateTriangle(){
+    setPoints();
+    clearCanvas();
     let randNum;
-    let newPoint;
-    ctx.clearRect(0, 0, 1000, 900);
+    let newStartPoint;
 
     for (let i = 0; i < 100000; i++){
-        randNum = rollDice();
-        switch(true) {
+        randNum = rollDie();
+
+        switch(true){
             case randNum == 1 || randNum == 2:
-                newPoint = findMidpoint(pointA[0], pointA[1], startingPoint[0], startingPoint[1] );
+                newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointA[0], pointA[1]);
                 break;
             case randNum == 3 || randNum == 4:
-                newPoint = findMidpoint(pointB[0], pointB[1], startingPoint[0], startingPoint[1] );
+                newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointB[0], pointB[1]);
                 break;
             case randNum == 5 || randNum == 6:
-                newPoint = findMidpoint(pointC[0], pointC[1], startingPoint[0], startingPoint[1] );
+                newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointC[0], pointC[1]);
                 break;
-            default:
-                console.log('Something went terribly wrong... sorry. Refresh and try again. ' + randNum);
-            }
-        startingPoint = newPoint;
-        plotPoint(newPoint[0], newPoint[1]);
+            default: 
+                console.log('Something went wrong with the switch statement in the square generation');
+        }
+        plotPoint(newStartPoint[0], newStartPoint[1]);
+        startingPoint = newStartPoint;
     }
 }
 
-let generateButton = document.getElementById('generate-btn');
+function generateSquare(){
+    setPoints();
+    clearCanvas();
+    let randNum;
+    let newStartPoint;
+    let prevNum;
 
-let clearButton = document.getElementById('clear-btn');
+    for (let i = 0; i < 100000; i++){
+        randNum = rollDie();
+        if (randNum != prevNum){
+            switch(true){
+                case randNum == 1:
+                    newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointA[0], pointA[1]);
+                    break;
+                case randNum == 2:
+                    newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointB[0], pointB[1]);
+                    break;
+                case randNum == 3:
+                    newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointC[0], pointC[1]);
+                    break;
+                case randNum == 4:
+                    newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointD[0], pointD[1]);
+                    break;
+                default: 
+                    console.log('Something went wrong with the switch statement in the square generation');
+            }
+        }else{
+            continue;
+        }
+        prevNum = randNum;
+        plotPoint(newStartPoint[0], newStartPoint[1]);
+        startingPoint = newStartPoint;
+    }
+}
 
-generateButton.addEventListener("click", startGeneration);
+function clearCanvas(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
-clearButton.addEventListener("click", function(){
-    ctx.clearRect(0, 0, 1000, 900);
-});
-
-
+function setPoints(){
+    pointA = setA();
+    pointB = setB();
+    pointC = setC();
+    pointD = setD();
+}
 
