@@ -36,7 +36,6 @@ document.getElementById('clear-btn').addEventListener('click', function(){
 
 function start(){
     // run generation here. Check which shape user has selected and then choose appropriate generation and canvas set
-    graphics.beginFill(0xFFFFFF);
     if (triangle){
         generateTriangle();
         console.log('generating a triangle...');
@@ -44,8 +43,6 @@ function start(){
         generateSquare();
         console.log('generating a square...');
     }
-    graphics.endFill();
-    app.stage.addChild(graphics);
 }
 
 function clickTriangle(){
@@ -66,7 +63,6 @@ function rollDie(){
         num = Math.floor(Math.random() * 6) + 1;
     }else{
         num = Math.floor(Math.random() * 4) + 1;
-        console.log(num);
     }
     return num;
 }
@@ -141,6 +137,9 @@ function findMidPoint(x1, y1, x2, y2){
 function generateTriangle(){
     setPoints();
     clearCanvas();
+
+    graphics.beginFill(0xFFFFFF);
+
     let randNum;
     let newStartPoint;
 
@@ -163,11 +162,16 @@ function generateTriangle(){
         plotPoint(newStartPoint[0], newStartPoint[1]);
         startingPoint = newStartPoint;
     }
+    graphics.endFill();
+    app.stage.addChild(graphics);
 }
 
 function generateSquare(){
     setPoints();
     clearCanvas();
+
+    graphics.beginFill(0xFFFFFF);
+
     let randNum;
     let newStartPoint;
     let prevNum;
@@ -198,10 +202,12 @@ function generateSquare(){
         plotPoint(newStartPoint[0], newStartPoint[1]);
         startingPoint = newStartPoint;
     }
+    graphics.endFill();
+    app.stage.addChild(graphics);
 }
 
 function clearCanvas(){
-    
+    graphics.clear();
 }
 
 function setPoints(){
