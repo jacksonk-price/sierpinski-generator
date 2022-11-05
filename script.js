@@ -1,10 +1,12 @@
-let canvas = document.getElementById('canvas');
+const app = new PIXI.Application({
+  resolution: devicePixelRatio, backgroundColor: 0x121212
+});
+document.getElementById('graphics-container').appendChild(app.view);
 
-let ctx = canvas.getContext('2d');
-ctx.fillStyle = "#FFF";
+const graphics = new PIXI.Graphics();
 
-let canvasWidth = canvas.width;
-let canvasHeight = canvas.height;
+let canvasWidth = app.screen.width;
+let canvasHeight = app.screen.height;
 
 let pointSize = [0.5, 0.5];
 
@@ -34,6 +36,7 @@ document.getElementById('clear-btn').addEventListener('click', function(){
 
 function start(){
     // run generation here. Check which shape user has selected and then choose appropriate generation and canvas set
+    graphics.beginFill(0xFFFFFF);
     if (triangle){
         generateTriangle();
         console.log('generating a triangle...');
@@ -41,6 +44,8 @@ function start(){
         generateSquare();
         console.log('generating a square...');
     }
+    graphics.endFill();
+    app.stage.addChild(graphics);
 }
 
 function clickTriangle(){
@@ -123,7 +128,7 @@ function setD(){
 }
 
 function plotPoint(pointX, pointY){
-    ctx.fillRect(pointX, pointY, pointSize[0], pointSize[1]);
+    graphics.drawRect(pointX, pointY, pointSize[0], pointSize[1]);
 }
 
 function findMidPoint(x1, y1, x2, y2){
@@ -196,7 +201,7 @@ function generateSquare(){
 }
 
 function clearCanvas(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
 }
 
 function setPoints(){
