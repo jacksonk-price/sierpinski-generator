@@ -35,7 +35,6 @@ document.getElementById('clear-btn').addEventListener('click', function(){
 });
 
 function start(){
-    // run generation here. Check which shape user has selected and then choose appropriate generation and canvas set
     if (triangle){
         generateTriangle();
         console.log('generating a triangle...');
@@ -157,7 +156,7 @@ function generateTriangle(){
                 newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointC[0], pointC[1]);
                 break;
             default: 
-                console.log('Something went wrong with the switch statement in the square generation');
+                console.log('Something went wrong with the triangle generation.');
         }
         plotPoint(newStartPoint[0], newStartPoint[1]);
         startingPoint = newStartPoint;
@@ -193,7 +192,7 @@ function generateSquare(){
                     newStartPoint = findMidPoint(startingPoint[0], startingPoint[1], pointD[0], pointD[1]);
                     break;
                 default: 
-                    console.log('Something went wrong with the switch statement in the square generation');
+                    console.log('Something went wrong with the square generation.');
             }
         }else{
             continue;
