@@ -4,9 +4,6 @@ Simple chaos game written in JavaScript using Pixi JS.
 
 ## Sierpiński triangle
 ### What is the chaos game?
-If one takes a point and applies each of the transformations dA, dB, and dC to it randomly, the resulting points will be dense in the Sierpiński triangle.
-
-Or more simply:
 
     Take three points in a plane to form a triangle.
     Randomly select any point inside the triangle and consider that your current position.
