@@ -12,7 +12,7 @@ Simple chaos game written in JavaScript using Pixi JS.
     Plot the current position.
     Repeat from step 3.
 
-The algorithm above is what the triangle selection uses within this appliction. You can read more about the chaos game [here](https://en.wikipedia.org/wiki/Sierpi%C5%84ski_triangle#Chaos_game).
+The algorithm above is what the triangle selection uses within this application. You can read more about the chaos game [here](https://en.wikipedia.org/wiki/Sierpi%C5%84ski_triangle#Chaos_game).
 
 ## Restricted Chaos Game
 If the chaos game is run with a four points instead of three, no fractal appears and the interior of the square fills evenly with points. However, if the current vertex cannot be chosen in the next iteration, fractals will appear in the square. 
